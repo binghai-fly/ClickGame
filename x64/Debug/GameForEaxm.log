@@ -1,8 +1,0 @@
-﻿  GameEntity.cpp
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(177,20): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(180,33): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(181,33): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(208,36): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-C:\Users\bingh\source\repos\GameForEaxm\GameForEaxm\GameEntity.cpp(209,36): warning C4244: “=”: 从“float”转换到“int”，可能丢失数据
-  GameForEaxm.vcxproj -> C:\Users\bingh\source\repos\GameForEaxm\x64\Debug\GameForEaxm.exe
