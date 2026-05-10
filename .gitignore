@@ -1,0 +1,15 @@
+# 编译生成的文件
+x64/
+Debug/
+Release/
+*.obj
+*.exe
+*.ilk
+*.pdb
+*.log
+*.tlog
+
+# VS 配置文件
+.vs/
+*.suo
+*.user
