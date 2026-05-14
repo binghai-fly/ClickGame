@@ -9,6 +9,7 @@ IMAGE monsterAttackImg;
 MonsterAttack monsterAttacks[MAX_MONSTER_ATTACKS];
 DWORD monsterAttackCD = 0;
 const DWORD MONSTER_ATTACK_COOLDOWN = 1000;
+int monstersKilledCount = 0;
 
 void GemInit() {
     gem.w = 40;
@@ -16,7 +17,7 @@ void GemInit() {
     gem.x = W / 2 - gem.w / 2;
     gem.y = H / 2 - gem.h / 2;
     gem.isAlive = true;
-    loadimage(&gem.img, _T("gem.png"), gem.w, gem.h);
+    loadimage(&gem.img, _T("picture/gem.png"), gem.w, gem.h);
 }
 
 void GemDraw() {
@@ -25,7 +26,7 @@ void GemDraw() {
 }
 
 void MonsterInit() {
-    loadimage(&monsterImg, _T("monster.png"), 40, 40);
+    loadimage(&monsterImg, _T("picture/monster.png"), 40, 40);
     for (int i = 0; i < MAX_MONSTERS; i++) {
         monsters[i].isAlive = false;
         monsters[i].w = 40;
@@ -39,7 +40,7 @@ void MonsterInit() {
 }
 
 void MonsterAttackInit() {
-    loadimage(&monsterAttackImg, _T("monster_attack.png"), 24, 24);
+    loadimage(&monsterAttackImg, _T("picture/monster_attack.png"), 24, 24);
     for (int i = 0; i < MAX_MONSTER_ATTACKS; i++) {
         monsterAttacks[i].isAlive = false;
         monsterAttacks[i].w = 24;
@@ -146,7 +147,7 @@ void AttackInit() {
         attacks[i].isAlive = false;
         attacks[i].w = 20;
         attacks[i].h = 20;
-        loadimage(&attacks[i].img, _T("attack.png"), 20, 20);
+        loadimage(&attacks[i].img, _T("picture/attack.png"), 20, 20);
     }
 }
 
@@ -237,42 +238,136 @@ bool AABBCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h
 }
 
 int CheckGameCollision() {
-    // 玩家攻击 vs 怪兽
+    // 1. 玩家攻击 vs 小怪（并增加击杀计数）
     for (int i = 0; i < MAX_MONSTERS; i++) {
         if (!monsters[i].isAlive) continue;
         for (int j = 0; j < MAX_ATTACKS; j++) {
             if (!attacks[j].isAlive) continue;
-            if (AABBCollision(attacks[j].x, attacks[j].y, 20, 20, monsters[i].x, monsters[i].y, 40, 40)) {
+            if (AABBCollision(attacks[j].x, attacks[j].y, 20, 20,
+                monsters[i].x, monsters[i].y, 40, 40)) {
                 monsters[i].isAlive = false;
                 attacks[j].isAlive = false;
                 player.coins += 1;
+                monstersKilledCount++;   // 关键：击杀计数增加
+            }
+        }
+    }
+
+    // 2. 玩家攻击 vs Boss
+    if (boss.isAlive) {
+        for (int j = 0; j < MAX_ATTACKS; j++) {
+            if (!attacks[j].isAlive) continue;
+            if (AABBCollision(attacks[j].x, attacks[j].y, 20, 20,
+                boss.x, boss.y, boss.w, boss.h)) {
+                attacks[j].isAlive = false;
+                boss.hp--;
+                if (boss.hp <= 0) 
+                    boss.isAlive = false;
+                break;
             }
         }
     }
 
     if (player.is_invincible) return 0;
 
-    // 怪兽攻击 vs 玩家
+    // 3. 小怪子弹 vs 玩家（原有代码保持不变）
     for (int i = 0; i < MAX_MONSTER_ATTACKS; i++) {
         if (monsterAttacks[i].isAlive && AABBCollision(monsterAttacks[i].x, monsterAttacks[i].y, 24, 24, player.x, player.y, 36, 36)) {
             player.hp--;
             monsterAttacks[i].isAlive = false;
-            return player.hp <= 0 ? 1 : 0;
+            if (player.hp <= 0) 
+            {
+                gameState=LOSE;
+                return 1;
+            }
         }
     }
 
-    // 怪兽碰撞玩家或宝石
-    for (int i = 0; i < MAX_MONSTERS; i++) {
-        if (!monsters[i].isAlive) continue;
-        if (AABBCollision(monsters[i].x, monsters[i].y, 40, 40, player.x, player.y, 36, 36)) {
+    // 4. Boss子弹 vs 玩家
+    for (int i = 0; i < MAX_BOSS_ATTACKS; i++) {
+        if (bossAttacks[i].isAlive &&
+            AABBCollision(bossAttacks[i].x, bossAttacks[i].y, 40, 40,
+                player.x, player.y, 36, 36)) {
             player.hp--;
-            monsters[i].isAlive = false;
-            return player.hp <= 0 ? 1 : 0;
-        }
-        if (AABBCollision(monsters[i].x, monsters[i].y, 40, 40, gem.x, gem.y, gem.w, gem.h)) {
-            return 1; // 宝石被摧毁，游戏结束
+            bossAttacks[i].isAlive = false;
+            if (player.hp <= 0) 
+            {
+                gameState=LOSE;
+                return 1;
+            }
+            break;
         }
     }
+
+    // 5. 小怪本体 vs 玩家（原有）
+    for (int i = 0; i < MAX_MONSTERS; i++) {
+        if (monsters[i].isAlive && AABBCollision(monsters[i].x, monsters[i].y, 40, 40, player.x, player.y, 36, 36)) {
+            player.hp--;
+            monsters[i].isAlive = false;
+            if (player.hp <= 0) 
+            {
+                gameState=LOSE;
+                return 1;
+            }
+        }
+    }
+
+    // 6. Boss本体 vs 玩家
+    if (boss.isAlive &&
+        AABBCollision(boss.x, boss.y, boss.w, boss.h,
+            player.x, player.y, 36, 36)) {
+        player.hp--;
+        if (player.hp <= 0) 
+        {
+            gameState=LOSE;
+            return 1;
+        }
+    }
+
+    // 7. 小怪 vs 宝石（原有）
+    for (int i = 0; i < MAX_MONSTERS; i++) {
+        if (monsters[i].isAlive &&
+            AABBCollision(monsters[i].x, monsters[i].y, 40, 40,
+                gem.x, gem.y, gem.w, gem.h)) {
+            gameState=LOSE;  // 宝石被毁，游戏失败
+
+        }
+    }
+
+    //8.地雷和小怪本体
+    for (int i = 0; i < MAX_MONSTERS; i++) {
+        for (int j = 0; j < MAX_LANDMINE; j++) {
+             if (monsters[i].isAlive && lm[i].isAlive&&AABBCollision(monsters[i].x, monsters[i].y, 40, 40, lm[j].x, lm[j].y, 24, 24)) {
+                    monsters[i].isAlive = false;
+                    lm[j].isAlive = false;
+                    boom[j].isAlive = true;
+                    boom[j].startTime = GetTickCount();
+                    player.coins += 1;
+                    monstersKilledCount++;
+             }
+        }
+        
+    }
+
+    //9.地雷和boss
+    for (int i = 0; i < MAX_LANDMINE; i++) {
+        if (boss.isAlive && lm[i].isAlive && AABBCollision(boss.x, boss.y, boss.w, boss.h, lm[i].x, lm[i].y, 24, 24)) {
+            boss.hp--;
+            boom[i].isAlive = true;
+            boom[i].startTime = GetTickCount();
+            player.coins += 1;
+            monstersKilledCount++;
+            lm[i].isAlive = false;
+            if (boss.hp <= 0) {
+                boss.isAlive = false;
+                
+                break;
+            }
+
+
+        }
+    }
+    
 
     return 0;
 }

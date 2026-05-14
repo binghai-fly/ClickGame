@@ -24,13 +24,16 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Platform.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="StartUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GameEntity.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Landmine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

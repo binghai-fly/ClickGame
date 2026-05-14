@@ -12,43 +12,48 @@
 #define MAX_MONSTERS 10
 #define MAX_ATTACKS 5
 #define MAX_BG_TILES 1
-#define MAX_MONSTER_ATTACKS 8  // 新增：怪兽攻击最大数量
+#define MAX_MONSTER_ATTACKS 8
+#define MAX_BOSS_ATTACKS 8
+#define MAX_LANDMINE 8
+#define MAX_BOOM 8
+#define BOSS_ATTACK_COOLDOWN 1500 
 
-// 游戏状态
 enum GameState {
-    MENU,        // 菜单
-    PLAYING,     // 游戏中
-    INTRO        // 游戏介绍界面（新增）
+    MENU,       
+    PLAYING,  
+    INTRO,
+    WIN,
+    LOSE
 };
 extern GameState gameState;
 
-// 玩家结构体
+
 struct Player {
-    IMAGE idle, run;       // 普通皮肤
-    IMAGE skill_idle, skill_run; // Q技能皮肤
+    IMAGE idle, run;      
+    IMAGE skill_idle, skill_run; 
     int x, y;
     int anim_frame;
     int anim_timer;
     int anim_speed;
     int state;
 
-    // 新增！！！
-    int hp;               // 血量 0-3
-    int coins;            // 金币
-    bool is_invincible;   // 无敌状态
-    DWORD skill_time;     // 技能计时
-    bool skill_using;    // 技能使用中
+    int hp;             
+    int coins;         
+    bool is_invincible;   
+    DWORD skill_time;     
+    bool skill_using;   
+    DWORD lastHitTime;
 };
 extern Player player;
 
-// 背景
+
 struct BackgroundTile {
     int x, y, w, h;
     IMAGE img;
 };
 extern BackgroundTile bgTiles[MAX_BG_TILES];
 
-// 宝石
+
 struct Gem {
     int x, y, w, h;
     IMAGE img;
@@ -56,7 +61,6 @@ struct Gem {
 };
 extern Gem gem;
 
-// 怪兽
 struct Monster {
     int x, y, w, h, vx, vy;
     IMAGE img;
@@ -65,7 +69,7 @@ struct Monster {
 };
 extern Monster monsters[MAX_MONSTERS];
 
-// 玩家攻击
+
 struct Attack {
     int x, y, w, h, vx, vy;
     IMAGE img;
@@ -73,7 +77,7 @@ struct Attack {
 };
 extern Attack attacks[MAX_ATTACKS];
 
-// 新增：怪兽攻击结构体
+
 struct MonsterAttack {
     int x, y, w, h, vx, vy;
     IMAGE img;
@@ -81,13 +85,68 @@ struct MonsterAttack {
 };
 extern MonsterAttack monsterAttacks[MAX_MONSTER_ATTACKS];
 
-// 菜单全局变量
+
+
+
+struct Boss {
+    int x, y, w, h, vx, vy;
+    IMAGE img1, img2, img3;
+    int anim_frame;
+    int anim_timer;
+    int anim_speed;
+    int hp;
+    int state;
+    bool isAlive;
+    bool bossSpawned;
+    DWORD attackCD;              
+};
+extern Boss boss;
+
+struct BossAttack {
+    int x, y, w, h, vx, vy;
+    IMAGE img;
+    bool isAlive;
+};
+extern BossAttack bossAttacks[MAX_BOSS_ATTACKS];
+
+// 全锟街伙拷杀锟斤拷锟斤拷
+extern int monstersKilledCount;
+
+struct Landmine {
+    int x, y;
+    int w, h;
+    IMAGE img;
+    bool isAlive;
+};
+extern Landmine lm[MAX_LANDMINE];
+
+struct Boom {
+    int x, y, w, h;
+    bool isAlive;
+    IMAGE img;
+    int startTime;
+};
+extern Boom boom[MAX_BOOM];
+// 锟斤拷锟斤拷锟斤拷锟斤拷
+void BossInit();
+void BossSpawn();
+void BossUpdate();
+void BossDraw();
+void BossUpdateAnim();
+void BossTakeDamage(int damage);
+void BossAttackInit();
+void BossAttackSpawn(int bossX, int bossY);
+void BossAttackUpdate();
+void BossAttackDraw();
+bool isBossAlive();
+void TryBuyLife();       
+
 extern int btnX, btnY,btnx,btny;
 extern const int BTN_W, BTN_H;
 extern MOUSEMSG m;
 extern int closeBtnX;
 extern int closeBtnY;
-// 函数声明
+
 void PlayerInit(Player* p);
 void PlayerDraw(Player* p);
 void PlayerInput(Player* p);
@@ -108,15 +167,15 @@ void AttackUpdate();
 void AttackDraw();
 int CheckGameCollision();
 void DrawTransparentImage(int x, int y, IMAGE* img);
-// 新增：怪兽攻击相关函数声明
+
 void MonsterAttackInit();
 void MonsterAttackSpawn(int monsterX, int monsterY);
 void MonsterAttackUpdate();
 void MonsterAttackDraw();
 void drawIntro();
-
-void PlayerInit(Player* p);
-void PlayerDraw(Player* p);
-void PlayerInput(Player* p);
-void PlayerUpdateAnim(Player* p);
 void DrawUI();
+void drawWin();
+void lmInit();
+void LayLm(int x, int y);
+void lmDraw();
+void drawLose();

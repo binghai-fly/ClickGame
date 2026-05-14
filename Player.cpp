@@ -5,11 +5,11 @@ Player player; // 全局玩家实例
 // 玩家初始化（移除地面/跳跃相关初始化）
 void PlayerInit(Player* p) {
     // 普通皮肤
-    loadimage(&p->idle, _T("tile_0000.png"), 24, 24);
-    loadimage(&p->run, _T("tile_0001.png"), 24, 24);
+    loadimage(&p->idle, _T("picture/tile_0000.png"), 24, 24);
+    loadimage(&p->run, _T("picture/tile_0001.png"), 24, 24);
     // Q技能皮肤
-    loadimage(&p->skill_idle, _T("tile_0006.png"), 24, 24);
-    loadimage(&p->skill_run, _T("tile_0007.png"), 24, 24);
+    loadimage(&p->skill_idle, _T("picture/tile_0006.png"), 24, 24);
+    loadimage(&p->skill_run, _T("picture/tile_0007.png"), 24, 24);
 
     p->x = W / 2;
     p->y = H / 2;
@@ -24,6 +24,7 @@ void PlayerInit(Player* p) {
     p->is_invincible = false;
     p->skill_using = false;
     p->skill_time = 0;
+    p->lastHitTime = 0;
 }
 
 // 玩家动画更新（移除跳跃状态判断）
@@ -83,6 +84,8 @@ void PlayerInput(Player* p) {
     int left = (GetAsyncKeyState('A') & 0x8000);
     int right = (GetAsyncKeyState('D') & 0x8000);
     int qat = (GetAsyncKeyState('Q') & 0x8000);
+    int e= (GetAsyncKeyState('E') & 0x8000);
+    
     // 自由移动逻辑（速度可自行调整）
     if (left)  p->x -= 5;
     if (right) p->x += 5;
@@ -99,6 +102,10 @@ void PlayerInput(Player* p) {
     if (p->skill_using && GetTickCount() - p->skill_time > 3000) {
         p->is_invincible = false;
         p->skill_using = false;
+    }
+
+    if (e) {
+        TryBuyLife();
     }
     // 状态判断：有移动则为移动状态，否则空闲
     p->state = (left || right || up || down) ? 1 : 0;

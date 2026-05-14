@@ -7,6 +7,8 @@ IMAGE heart_full;
 IMAGE heart_empty;
 IMAGE coin_icon;
 IMAGE num_imgs[10];
+IMAGE overBg;
+IMAGE loseBg;
 int btnX, btnY;
 const int BTN_W = 180;
 const int BTN_H = 50;
@@ -15,15 +17,17 @@ int closeBtnX ;
 int closeBtnY ;
 
 void initMenu() {
-    loadimage(&menuBg, _T("stbk.png"), W, H);
+    loadimage(&menuBg, _T("picture/stbk.png"), W, H);
+    loadimage(&overBg, _T("picture/over.png"), W, H);
+    loadimage(&loseBg, _T("picture/lose.png"), W, H);
     //loadimage(&startBtnImg, _T("bt.png"), BTN_W, BTN_H);
-    loadimage(&gameIntro, _T("gameIntro.png"), 500, H );
-    loadimage(&heart_full, _T("tile_0044.png"), 24, 24);
-    loadimage(&heart_empty, _T("tile_0046.png"), 24, 24);
-    loadimage(&coin_icon, _T("tile_0151.png"), 24, 24);
+    loadimage(&gameIntro, _T("picture/gameIntro.png"), 500, H+20 );
+    loadimage(&heart_full, _T("picture/tile_0044.png"), 24, 24);
+    loadimage(&heart_empty, _T("picture/tile_0046.png"), 24, 24);
+    loadimage(&coin_icon, _T("picture/tile_0151.png"), 24, 24);
     for (int i = 0; i < 10; i++) {
         TCHAR path[50];
-        wsprintf(path, _T("tile_016%d.png"), i);
+        wsprintf(path, _T("picture/tile_016%d.png"), i);
         loadimage(&num_imgs[i], path, 24, 24);
     }
     btnX = W / 2 - BTN_W / 2;
@@ -169,7 +173,7 @@ void DrawUI() {
     HDC srcDC = GetImageHDC(curImg);
 
     BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-    AlphaBlend(dstDC, W-100, 10, w, h,
+    AlphaBlend(dstDC, W-130, 10, w, h,
         srcDC, 0, 0, w, h, blend);
     
     
@@ -210,4 +214,139 @@ void DrawUI() {
             n /= 10;
         }
     }
+
+    //总击败个数
+    setbkmode(TRANSPARENT);
+    setcolor(RED);
+    settextstyle(18, 0, _T("隶书"));
+    outtextxy(W/2-140, 12, _T("总击败怪兽数："));
+    int nn = monstersKilledCount;
+    if (nn == 0) {
+        curImg = &num_imgs[0];
+        if (curImg == NULL) return;
+
+        int w = curImg->getwidth();
+        int h = curImg->getheight();
+
+        HDC dstDC = GetImageHDC(NULL);
+        HDC srcDC = GetImageHDC(curImg);
+
+        BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+        AlphaBlend(dstDC, W /2, 10, w, h,
+            srcDC, 0, 0, w, h, blend);
+
+    }
+    else {
+        int x = W /2;
+        while (nn > 0) {
+            int d = nn % 10;
+            curImg = &num_imgs[d];
+            if (curImg == NULL) return;
+
+            int w = curImg->getwidth();
+            int h = curImg->getheight();
+
+            HDC dstDC = GetImageHDC(NULL);
+            HDC srcDC = GetImageHDC(curImg);
+
+            BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+            AlphaBlend(dstDC, x, 10, w, h,
+                srcDC, 0, 0, w, h, blend);
+            x -= 25;
+            nn /= 10;
+        }
+    }
+
+}
+
+void drawWin() {
+    putimage(0, 0, &overBg);
+    COLORREF btnColor = RGB(255, 128, 0);
+    // 悬浮颜色
+    COLORREF hoverColor = RGB(255, 165, 50);
+    // 点击颜色
+    COLORREF clickColor = RGB(200, 80, 0);
+
+    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
+        m.y >= btnY && m.y <= btnY + BTN_H);
+    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
+        m.y >= btny && m.y <= btny + BTN_H);
+
+    if (inBtn)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
+    if (inBtn1)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+
+
+    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
+    setbkmode(TRANSPARENT);
+    setcolor(WHITE);
+    settextstyle(30, 0, _T("隶书"));
+    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
+    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
+}
+
+void drawLose() {
+    putimage(0, 0, &loseBg);
+    COLORREF btnColor = RGB(255, 128, 0);
+    // 悬浮颜色
+    COLORREF hoverColor = RGB(255, 165, 50);
+    // 点击颜色
+    COLORREF clickColor = RGB(200, 80, 0);
+
+    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
+        m.y >= btnY && m.y <= btnY + BTN_H);
+    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
+        m.y >= btny && m.y <= btny + BTN_H);
+
+    if (inBtn)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
+    if (inBtn1)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+
+
+    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
+    setbkmode(TRANSPARENT);
+    setcolor(WHITE);
+    settextstyle(30, 0, _T("隶书"));
+    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
+    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
 }

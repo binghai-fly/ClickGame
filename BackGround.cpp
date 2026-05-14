@@ -8,7 +8,7 @@ void BGLoad() {
 	bgTiles[0].y = 0;
 	bgTiles[0].w = W;
 	bgTiles[0].h = H;
-	loadimage(&bgTiles[0].img, _T("bk2.png"), W, H);
+	loadimage(&bgTiles[0].img, _T("picture/bk2.png"), W, H);
 }
 
 void DrawAllBgTiles() {
@@ -16,9 +16,4 @@ void DrawAllBgTiles() {
 	putimage(bgTiles[0].x, bgTiles[0].y, &bgTiles[0].img);
 }
 
-void DrawPlatform(int startX, int baseY, int cnt) {
-	setfillcolor(RGB(139, 69, 19));
-	for (int i = 0; i < cnt; i++) {
-		solidrectangle(startX + i * 50, baseY, startX + i * 50 + 48, baseY + 10);
-	}
-}
+
