@@ -129,6 +129,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="Landmine.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StartUI.cpp" />

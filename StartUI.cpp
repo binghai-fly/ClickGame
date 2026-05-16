@@ -15,6 +15,8 @@ const int BTN_H = 50;
 int btnx, btny;
 int closeBtnX ;
 int closeBtnY ;
+TCHAR num[20];
+int numm;
 
 void initMenu() {
     loadimage(&menuBg, _T("picture/stbk.png"), W, H);

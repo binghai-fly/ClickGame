@@ -11,6 +11,8 @@ int main() {
     BGLoad();
     initMenu();
 
+    PlayBGM(_T("b1.mp3"));
+
     DWORD spawnTime = GetTickCount();
 
     while (1) {
@@ -22,7 +24,10 @@ int main() {
             if (gameState == MENU && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= btnX && m.x <= btnX + BTN_W &&
                     m.y >= btnY && m.y <= btnY + BTN_H) {
+                    InputBox(num, 20, _T("Enter the number of monsters to kill before BOSS appears"));
+                    numm = _ttoi(num);
                     gameState = PLAYING;
+                    PlayBGM(_T("bgm.mp3"));
                     PlayerInit(&player);
                     GemInit();
                     MonsterInit();
@@ -41,6 +46,7 @@ int main() {
                 if (m.x >= closeBtnX && m.x <= closeBtnX + BTN_W &&
                     m.y >= closeBtnY && m.y <= closeBtnY + BTN_H) {
                     gameState = MENU; // 点击关闭返回菜单
+                    PlayBGM(_T("b1.mp3"));
                 }
             }
             else if (gameState == PLAYING && m.uMsg == WM_LBUTTONDOWN) {
@@ -53,10 +59,12 @@ int main() {
                 if (m.x >= btnX && m.x <= btnX + BTN_W &&
                     m.y >= btnY && m.y <= btnY + BTN_H) {
                     gameState = MENU;
+                    PlayBGM(_T("b1.mp3"));
                 }
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
                     m.y >= btny && m.y <= btny + BTN_H) {
                     gameState = PLAYING;
+                    PlayBGM(_T("bgm.mp3"));
                     PlayerInit(&player);
                     GemInit();
                     MonsterInit();
@@ -71,10 +79,13 @@ int main() {
                 if (m.x >= btnX && m.x <= btnX + BTN_W &&
                     m.y >= btnY && m.y <= btnY + BTN_H) {
                     gameState = MENU;
+                    PlayBGM(_T("b1.mp3"));
+
                 }
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
                     m.y >= btny && m.y <= btny + BTN_H) {
                     gameState = PLAYING;
+                    PlayBGM(_T("bgm.mp3"));
                     PlayerInit(&player);
                     GemInit();
                     MonsterInit();
@@ -102,7 +113,7 @@ int main() {
                 MonsterSpawn();
                 spawnTime = GetTickCount();
             }
-            if (!boss.isAlive && monstersKilledCount >= 15) {
+            if (!boss.isAlive && monstersKilledCount >= numm) {
                 BossSpawn();
                 boss.bossSpawned = true;
             }
@@ -118,10 +129,14 @@ int main() {
 
             if (CheckGameCollision() == 1) {
                 gameState = LOSE;
+                StopBGM();          // 专门停止背景音乐
+                PlayLoseMusic(_T("lose.mp3"));
             }
 
             if (!boss.isAlive&&boss.bossSpawned) {
                 gameState = WIN;
+                StopBGM();
+                PlayWinMusic(_T("win.mp3"));
                 continue;
             }
             
@@ -145,7 +160,7 @@ int main() {
         }
 
         FlushBatchDraw();
-        Sleep(16);
+        Sleep(20);
     }
 
     closegraph();

@@ -17,12 +17,16 @@ void GemInit() {
     gem.x = W / 2 - gem.w / 2;
     gem.y = H / 2 - gem.h / 2;
     gem.isAlive = true;
-    loadimage(&gem.img, _T("picture/gem.png"), gem.w, gem.h);
+    gem.state = 1;
+    loadimage(&gem.img1, _T("picture/gem.png"), gem.w, gem.h);
+    loadimage(&gem.img2, _T("picture/gem1.png"), gem.w, gem.h);
 }
 
 void GemDraw() {
-    if (gem.isAlive)
-        DrawTransparentImage(gem.x, gem.y, &gem.img);
+    if (gem.isAlive&&gem.state==1)
+        DrawTransparentImage(gem.x, gem.y, &gem.img1);
+    else if (gem.isAlive&&gem.state==2)
+        DrawTransparentImage(gem.x, gem.y, &gem.img2);
 }
 
 void MonsterInit() {
@@ -325,20 +329,23 @@ int CheckGameCollision() {
     }
 
     // 7. 小怪 vs 宝石（原有）
+    if (gem.state==1)
     for (int i = 0; i < MAX_MONSTERS; i++) {
-        if (monsters[i].isAlive &&
-            AABBCollision(monsters[i].x, monsters[i].y, 40, 40,
-                gem.x, gem.y, gem.w, gem.h)) {
-            gameState=LOSE;  // 宝石被毁，游戏失败
+        if (monsters[i].isAlive && AABBCollision(monsters[i].x, monsters[i].y, 40, 40,gem.x, gem.y, gem.w, gem.h)) {
+            return 1;  // 宝石被毁，游戏失败
 
         }
     }
+    if (gem.state == 1)
+    if (boss.isAlive &&AABBCollision(boss.x, boss.y, boss.w, boss.h,gem.x, gem.y, gem.w, gem.h)) return 1;
+
 
     //8.地雷和小怪本体
     for (int i = 0; i < MAX_MONSTERS; i++) {
         for (int j = 0; j < MAX_LANDMINE; j++) {
              if (monsters[i].isAlive && lm[i].isAlive&&AABBCollision(monsters[i].x, monsters[i].y, 40, 40, lm[j].x, lm[j].y, 24, 24)) {
                     monsters[i].isAlive = false;
+                    PlayMineExplode(_T("mine_explode.mp3"));
                     lm[j].isAlive = false;
                     boom[j].isAlive = true;
                     boom[j].startTime = GetTickCount();
@@ -353,6 +360,7 @@ int CheckGameCollision() {
     for (int i = 0; i < MAX_LANDMINE; i++) {
         if (boss.isAlive && lm[i].isAlive && AABBCollision(boss.x, boss.y, boss.w, boss.h, lm[i].x, lm[i].y, 24, 24)) {
             boss.hp--;
+            PlayMineExplode(_T("mine_explode.mp3"));
             boom[i].isAlive = true;
             boom[i].startTime = GetTickCount();
             player.coins += 1;

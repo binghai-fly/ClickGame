@@ -5,6 +5,9 @@
 #include <time.h>
 #include <cmath>  
 #include<vector>
+#include<mmsystem.h>
+#include<tchar.h>
+#pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"msimg32.lib")
 
 #define W 918
@@ -56,7 +59,9 @@ extern BackgroundTile bgTiles[MAX_BG_TILES];
 
 struct Gem {
     int x, y, w, h;
-    IMAGE img;
+    int state;
+    int skill_time;
+    IMAGE img1, img2;
     bool isAlive;
 };
 extern Gem gem;
@@ -146,6 +151,8 @@ extern const int BTN_W, BTN_H;
 extern MOUSEMSG m;
 extern int closeBtnX;
 extern int closeBtnY;
+extern TCHAR num[20];
+extern int numm;
 
 void PlayerInit(Player* p);
 void PlayerDraw(Player* p);
@@ -179,3 +186,8 @@ void lmInit();
 void LayLm(int x, int y);
 void lmDraw();
 void drawLose();
+void PlayBGM(const TCHAR* name);
+void StopBGM();
+void PlayWinMusic(const TCHAR* name);
+void PlayLoseMusic(const TCHAR* name);
+void PlayMineExplode(const TCHAR* name);

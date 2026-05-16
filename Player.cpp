@@ -85,6 +85,7 @@ void PlayerInput(Player* p) {
     int right = (GetAsyncKeyState('D') & 0x8000);
     int qat = (GetAsyncKeyState('Q') & 0x8000);
     int e= (GetAsyncKeyState('E') & 0x8000);
+    int space = (GetAsyncKeyState(VK_SPACE) & 0x8000);
     
     // 自由移动逻辑（速度可自行调整）
     if (left)  p->x -= 5;
@@ -106,6 +107,17 @@ void PlayerInput(Player* p) {
 
     if (e) {
         TryBuyLife();
+    }
+    if (space) {
+        if (gem.state == 1 && p->coins >= 5) {
+            p->coins -= 5;
+            gem.state = 2;
+            gem.skill_time = GetTickCount();
+        }
+        
+    }
+    if (gem.state == 2 && GetTickCount() - gem.skill_time > 5000) {
+        gem.state = 1;
     }
     // 状态判断：有移动则为移动状态，否则空闲
     p->state = (left || right || up || down) ? 1 : 0;
