@@ -1,6 +1,6 @@
 #include "head.h"
 
-GameState gameState = MENU;
+GameState gameState = MENU0;
 Gem gem;
 Monster monsters[MAX_MONSTERS];
 Attack attacks[MAX_ATTACKS];
@@ -10,6 +10,10 @@ MonsterAttack monsterAttacks[MAX_MONSTER_ATTACKS];
 DWORD monsterAttackCD = 0;
 const DWORD MONSTER_ATTACK_COOLDOWN = 1000;
 int monstersKilledCount = 0;
+// Globals declared in head.h
+DWORD spawnTime = 0;
+DWORD attackCD = 0;
+const DWORD ATTACK_COOLDOWN = 200;
 
 void GemInit() {
     gem.w = 40;
@@ -281,7 +285,7 @@ int CheckGameCollision() {
             monsterAttacks[i].isAlive = false;
             if (player.hp <= 0) 
             {
-                gameState=LOSE;
+                gameState=LOSE1;
                 return 1;
             }
         }
@@ -296,7 +300,7 @@ int CheckGameCollision() {
             bossAttacks[i].isAlive = false;
             if (player.hp <= 0) 
             {
-                gameState=LOSE;
+                gameState=LOSE1;
                 return 1;
             }
             break;
@@ -310,7 +314,7 @@ int CheckGameCollision() {
             monsters[i].isAlive = false;
             if (player.hp <= 0) 
             {
-                gameState=LOSE;
+                gameState=LOSE1;
                 return 1;
             }
         }
@@ -323,7 +327,7 @@ int CheckGameCollision() {
         player.hp--;
         if (player.hp <= 0) 
         {
-            gameState=LOSE;
+            gameState=LOSE1;
             return 1;
         }
     }
@@ -343,7 +347,8 @@ int CheckGameCollision() {
     //8.地雷和小怪本体
     for (int i = 0; i < MAX_MONSTERS; i++) {
         for (int j = 0; j < MAX_LANDMINE; j++) {
-             if (monsters[i].isAlive && lm[i].isAlive&&AABBCollision(monsters[i].x, monsters[i].y, 40, 40, lm[j].x, lm[j].y, 24, 24)) {
+             // use lm[j] (landmine index) when checking mine state
+             if (monsters[i].isAlive && lm[j].isAlive && AABBCollision(monsters[i].x, monsters[i].y, 40, 40, lm[j].x, lm[j].y, 24, 24)) {
                     monsters[i].isAlive = false;
                     PlayMineExplode(_T("mine_explode.mp3"));
                     lm[j].isAlive = false;
@@ -353,7 +358,7 @@ int CheckGameCollision() {
                     monstersKilledCount++;
              }
         }
-        
+
     }
 
     //9.地雷和boss

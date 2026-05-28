@@ -77,7 +77,7 @@ void PlayerDraw(Player* p)
 
 // 玩家输入（纯自由移动，移除跳跃/地面判断）
 void PlayerInput(Player* p) {
-    if (gameState != PLAYING) return;
+    if (gameState != PLAYING1) return;
     // WASD/方向键移动
     int up = (GetAsyncKeyState('W') & 0x8000);
     int down = (GetAsyncKeyState('S') & 0x8000);

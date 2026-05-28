@@ -9,6 +9,8 @@ IMAGE coin_icon;
 IMAGE num_imgs[10];
 IMAGE overBg;
 IMAGE loseBg;
+IMAGE bk1;
+IMAGE bk2;
 int btnX, btnY;
 const int BTN_W = 180;
 const int BTN_H = 50;
@@ -19,19 +21,21 @@ TCHAR num[20];
 int numm;
 
 void initMenu() {
-    loadimage(&menuBg, _T("picture/stbk.png"), W, H);
-    loadimage(&overBg, _T("picture/over.png"), W, H);
-    loadimage(&loseBg, _T("picture/lose.png"), W, H);
-    //loadimage(&startBtnImg, _T("bt.png"), BTN_W, BTN_H);
-    loadimage(&gameIntro, _T("picture/gameIntro.png"), 500, H+20 );
-    loadimage(&heart_full, _T("picture/tile_0044.png"), 24, 24);
-    loadimage(&heart_empty, _T("picture/tile_0046.png"), 24, 24);
-    loadimage(&coin_icon, _T("picture/tile_0151.png"), 24, 24);
+    safeLoadImage(&menuBg, _T("picture/stbk.png"), W, H);
+    safeLoadImage(&overBg, _T("picture/over.png"), W, H);
+    safeLoadImage(&loseBg, _T("picture/lose.png"), W, H);
+    safeLoadImage(&bk1, _T("picture/bk1.png"), W, H);
+    safeLoadImage(&bk2, _T("picture/bk2.png"), W, H);
+    safeLoadImage(&gameIntro, _T("picture/gameIntro.png"), 500, H + 20);
+    safeLoadImage(&heart_full, _T("picture/tile_0044.png"), 24, 24);
+    safeLoadImage(&heart_empty, _T("picture/tile_0046.png"), 24, 24);
+    safeLoadImage(&coin_icon, _T("picture/tile_0151.png"), 24, 24);
     for (int i = 0; i < 10; i++) {
         TCHAR path[50];
         wsprintf(path, _T("picture/tile_016%d.png"), i);
-        loadimage(&num_imgs[i], path, 24, 24);
+        safeLoadImage(&num_imgs[i], path, 24, 24);
     }
+    
     btnX = W / 2 - BTN_W / 2;
     btnY = H / 2 + 100;
     btnx = btnX;
@@ -39,9 +43,62 @@ void initMenu() {
     
 }
 
+void drawMenu1() {
+    if (isValidImage(&bk1))
+    putimage(0, 0, &bk1);
+    else {
+        setfillcolor(RGB(30, 30, 60));
+        solidrectangle(0, 0, W, H);
+    }
+    COLORREF btnColor = RGB(255, 128, 0);
+    // 悬浮颜色
+    COLORREF hoverColor = RGB(255, 165, 50);
+    // 点击颜色
+    COLORREF clickColor = RGB(200, 80, 0);
+
+    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
+        m.y >= btnY && m.y <= btnY + BTN_H);
+    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
+        m.y >= btny && m.y <= btny + BTN_H);
+
+    if (inBtn)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
+    if (inBtn1)
+    {
+        if (m.uMsg == WM_LBUTTONDOWN)
+            setfillcolor(clickColor);   // 按下变深
+        else
+            setfillcolor(hoverColor);   // 悬浮变浅
+    }
+    else
+    {
+        setfillcolor(btnColor);         // 离开恢复原色
+    }
+
+
+    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
+    setbkmode(TRANSPARENT);
+    setcolor(WHITE);
+    settextstyle(30, 0, _T("隶书"));
+    outtextxy(btnX + 60, btnY + 7, _T("转避"));
+    outtextxy(btnx + 30, btny + 7, _T("拳皇苍穹"));
+}
+
 void drawMenu() {
  
     putimage(0, 0, &menuBg);
+    drawHome();
+
     
     /*putimage(btnX, btnY, &startBtnImg);*/
        // 默认颜色
@@ -91,6 +148,8 @@ void drawMenu() {
 
 void drawIntro() {
     putimage(0, 0, &menuBg);
+    drawHome();
+
     //putimage(200, 0, &gameIntro);
     int w = gameIntro.getwidth();
     int h = gameIntro.getheight();
@@ -129,8 +188,13 @@ void drawIntro() {
     settextstyle(30, 0, _T("黑体"));
     outtextxy(closeBtnX + 60, closeBtnY + 7, _T("关闭"));
 }
+
+void bkDraw() {
+    putimage(0, 0, &bk2);
+}
 // 新增函数：画血量和金币
 void DrawUI() {
+
     // 左上角：3颗爱心
     IMAGE* curImg = NULL;
     for (int i = 0; i < 3; i++) {
@@ -263,6 +327,8 @@ void DrawUI() {
 
 void drawWin() {
     putimage(0, 0, &overBg);
+    drawHome();
+
     COLORREF btnColor = RGB(255, 128, 0);
     // 悬浮颜色
     COLORREF hoverColor = RGB(255, 165, 50);
@@ -309,6 +375,8 @@ void drawWin() {
 
 void drawLose() {
     putimage(0, 0, &loseBg);
+    drawHome();
+
     COLORREF btnColor = RGB(255, 128, 0);
     // 悬浮颜色
     COLORREF hoverColor = RGB(255, 165, 50);

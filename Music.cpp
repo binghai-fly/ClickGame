@@ -11,6 +11,16 @@ void PlayBGM(const TCHAR* name)
     mciSendString(_T("play bgm repeat"), NULL, 0, NULL);
 }
 
+void PlayBGM2(const TCHAR* name)
+{
+    mciSendString(_T("close bgm"), NULL, 0, NULL);
+    TCHAR path[128], cmd[256];
+    wsprintf(path, _T("sound/%s"), name);
+    wsprintf(cmd, _T("open %s alias bgm"), path);
+    mciSendString(cmd, NULL, 0, NULL);
+    mciSendString(_T("play bgm"), NULL, 0, NULL);
+}
+
 // Õ£÷π±≥æ∞“Ù¿÷
 void StopBGM()
 {

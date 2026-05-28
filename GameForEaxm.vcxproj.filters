@@ -21,9 +21,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="StartUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -37,6 +34,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Music.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Fighter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Attack.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Draw.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Update.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
