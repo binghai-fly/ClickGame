@@ -39,6 +39,7 @@ enum GameState {
     MENU2,
     PLAYING1,
     PLAYING2,
+    PLAYING2_2,
     INTRO1,
     INTRO2,
     INTRO2_1,
@@ -286,7 +287,7 @@ void shieldCollisionBlock();
 void resetGame();
 // Fighter module functions (defined in Fighter.cpp / Draw.cpp)
 void update();      // update fighter game logic
-void draw();        // draw fighter scene (implemented in Fighter.cpp)
+
 void drawEvery();   // draw helper in Draw.cpp that doesn't Begin/Flush batch
 void drawMenu2();   // menu 2 (拳皇) 绘制
 // main loop update implemented in Update.cpp

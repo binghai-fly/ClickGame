@@ -35,8 +35,8 @@ void updateAI() {
         else p2.x += p2.speed;
     }
 
-    if (p2.x < 50) p2.x = 50;
-    if (p2.x > W - ROLE_SIZE1 - 50) p2.x = W - ROLE_SIZE1 - 50;
+    if (p2.x < 10) p2.x = 10;
+    if (p2.x > W - ROLE_SIZE1 - 10) p2.x = W - ROLE_SIZE1 - 10;
 
     if (p2.hp < 120 && !p2.isDefending && !p2.isAttack && p2.defendTimer == 0 && absDistance < 120) {
         p2.isDefending = true;
@@ -157,8 +157,8 @@ void update() {
         }
         if (!sIsPressed) sWasPressed = false;
 
-        if (p1.x < 50) p1.x = 50;
-        if (p1.x > W - ROLE_SIZE - 50) p1.x = W - ROLE_SIZE - 50;
+        if (p1.x < 10) p1.x = 0;
+        if (p1.x > W - ROLE_SIZE - 10) p1.x = W - ROLE_SIZE - 10;
 
         static bool spaceWasPressed = false;
         bool spaceIsPressed = (GetAsyncKeyState(VK_SPACE) & 0x8000);
@@ -194,11 +194,11 @@ void update() {
             p1Ultimate.active = true;
             // use locked facing stored at activation time
             if (p1.ultimateFace == -1) {
-                p1Ultimate.x = p1.x + ROLE_SIZE;
+                p1Ultimate.x = p1.x + ROLE_SIZE/2;
                 p1Ultimate.vx = 15;
             }
             else {
-                p1Ultimate.x = p1.x - 80;
+                p1Ultimate.x = p1.x - 80/2;
                 p1Ultimate.vx = -15;
             }
             p1Ultimate.y = p1.y + 40;
@@ -215,11 +215,11 @@ void update() {
             // p2.face == 1 means facing right (set in updateAI), spawn projectile accordingly
             // Determine direction towards player at the moment of release (AI should aim at player)
             if (p1.x > p2.x) {
-                p2Ultimate.x = p2.x + ROLE_SIZE1;
+                p2Ultimate.x = p2.x + ROLE_SIZE1/2;
                 p2Ultimate.vx = 15;
             }
             else {
-                p2Ultimate.x = p2.x - 80;
+                p2Ultimate.x = p2.x - 80/2;
                 p2Ultimate.vx = -15;
             }
             p2Ultimate.y = p2.y + 40;
@@ -307,115 +307,8 @@ void update() {
 
 
 
-void draw() {
-    BeginBatchDraw();
-
-    if (isValidImage(&bg)) {
-        putimage(0, 0, &bg);
-    }
-    else {
-        setfillcolor(RGB(30, 30, 50));
-        solidrectangle(0, 0, W,H);
-    }
-
-    drawHp(50, 30, 400, 30, p1.hp, p1.maxHp, RGB(0, 255, 0));
-    drawHp(W - 450, 30, 400, 30, p2.hp, p2.maxHp, RGB(255, 0, 0));
-
-    settextcolor(WHITE);
-    setbkmode(TRANSPARENT);
-    settextstyle(24, 0, _T("黑体"));
-    outtextxy(60, 65, _T("海波东"));
-    outtextxy(W - 170, 65, _T("美杜莎"));
-
-    if (!(gameState==LOSE2||gameState==WIN2)) {
-        drawAttackCd(50, 110, p1.attackCd, 60, _T("攻击"));
-        drawAttackCd(W - 170, 110, p2.attackCd, 60, _T("攻击"));
-        drawAttackCd(50, 150, p1.ultimateCd, 180, _T("大招(玄冰龙翔)"));
-        drawAttackCd(W - 170, 150, p2.ultimateCd, 180, _T("大招(蛇)"));
-        // 绘制防御CD
-        drawAttackCd(50, 190, p1.defendCd, 60, _T("防御(S)"));
-        drawAttackCd(W - 170, 190, p2.defendCd, 60, _T("防御"));
-    }
-
-
-    // 绘制大招 - 直接绘制，不做额外检查
-    if (p1Ultimate.active && isValidImage(&dragon)) {
-        drawFlip(&dragon, p1Ultimate.x, p1Ultimate.y, 100, p1Ultimate.vx < 0);
-    }
-    if (p2Ultimate.active && isValidImage(&snake)) {
-        drawFlip(&snake, p2Ultimate.x, p2Ultimate.y, 100, p2Ultimate.vx < 0);
-    }
-
-    // 绘制P1
-    static int runFrame1 = 0;
-    runFrame1 = (runFrame1 + 1) % 12;
-    // 绘制优先级: 攻击 > 跳跃 > 跑动
-    if (p1.isAttack && isValidImage(&p1_attack[0])) {
-        int frame = p1.attackTimer / 5; // attackTimer范围约为0..19，分成4帧
-        if (frame > 3) frame = 3;
-        drawFlip(&p1_attack[frame], p1.x, p1.y, ROLE_SIZE, p1.face == -1);
-    }
-    else if (!p1.isOnGround && isValidImage(&p1_jump)) {
-        drawFlip(&p1_jump, p1.x, p1.y, ROLE_SIZE, p1.face == -1);
-    }
-    else if (p1.isDefending) {
-        //int sx = p1.face == -1 ? p1.x + ROLE_SIZE - 40 : p1.x - 40;
-        if (isValidImage(&shield[0])) {
-            drawFlip(&shield[0], p1.x, p1.y, ROLE_SIZE, p1.face == 1);
-        }
-    }
-    else {
-        int idx = (std::min)(runFrame1 / 4, 2);
-        drawFlip(&p1_run[idx], p1.x, p1.y, ROLE_SIZE, p1.face == -1);
-    }
-
-    // 绘制P2
-    static int runFrame2 = 0;
-    runFrame2 = (runFrame2 + 1) % 12;
-    // 绘制优先级: 攻击 > 跳跃 > 跑动
-    if (p2.isAttack && isValidImage(&p2_attack[0])) {
-        int frame = p2.attackTimer / 5; // attackTimer范围约为0..19，分成4帧
-        if (frame > 3) frame = 3;
-        drawFlip(&p2_attack[frame], p2.x, p2.y, ROLE_SIZE1, p2.face == 1);
-    }
-    else if (!p2.isOnGround && isValidImage(&p2_jump[0])) {
-        drawFlip(&p2_jump[runFrame2 / 3], p2.x, p2.y, ROLE_SIZE1, p2.face == 1);
-    }
-    else {
-        int idx = (std::min)(runFrame2 / 4, 2);
-        drawFlip(&p2_stand[idx], p2.x, p2.y, ROLE_SIZE1, p2.face == 1);
-    }
-
-    // 胜负显示
-    if (p1.hp <= 0 || p2.hp <= 0) {
-        settextstyle(80, 0, _T("黑体"));
-        if (p1.hp <= 0) {
-            settextcolor(RGB(255, 100, 100));
-            outtextxy(W / 2 - 120,H / 2 - 80, _T("美杜莎WIN!"));
-        }
-        if (p2.hp <= 0) {
-            settextcolor(RGB(100, 255, 100));
-            outtextxy(W / 2 - 120,H / 2 - 80, _T("海波东 WIN!"));
-        }
-        settextstyle(40, 0, _T("黑体"));
-        settextcolor(RGB(255, 255, 0));
-        outtextxy(W / 2 - 100,H / 2 + 20, _T("PRESS R TO RESTART"));
-        outtextxy(W / 2 - 100,H / 2 + 70, _T("PRESS ESC TO EXIT"));
-    }
-    else {
-        settextstyle(20, 0, _T("黑体"));
-        settextcolor(RGB(200, 200, 200));
-        outtextxy(50,H - 80, _T("A/D: 移动  SPACE: 跳跃"));
-        outtextxy(50,H - 55, _T("J: 攻击  K: 大招(玄冰龙翔)  S: 防御"));
-        outtextxy(50,H - 30, _T("R: 重玩"));
-    }
-
-    FlushBatchDraw();
-}
 
 void resetGame() {
-    //gameOver = false;
-
     // 重置玩家1
     p1.x = 200;
     p1.y = GROUND_Y - ROLE_SIZE;

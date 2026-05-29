@@ -9,7 +9,8 @@ int main() {
     srand((unsigned)time(NULL));
 
     int numm = rand()%10 + 20;
-    
+    PlayBGM(_T("startbgm.mp3"));
+
     initMenu();
     Imageinit();
    
@@ -31,7 +32,7 @@ int main() {
                 }
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
                     m.y >= btny && m.y <= btny + BTN_H) {
-
+                    PlayBGM(_T("qjbgmst.mp3"));
                     gameState =MENU2;
                 }
                 
@@ -58,6 +59,8 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == MENU2 && m.uMsg == WM_LBUTTONDOWN) {
@@ -65,6 +68,7 @@ int main() {
                     m.y >= btnY && m.y <= btnY + BTN_H) {
                     gameState = PLAYING2;
                     resetGame();
+                    PlayBGM(_T("qjbgm.mp3"));
                    
                 }
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
@@ -74,6 +78,8 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == INTRO1 && m.uMsg == WM_LBUTTONDOWN) {
@@ -85,11 +91,15 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == INTRO2 && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= W - 60 && m.x <= W - 10 && m.y >= 20 && m.y <= 70) {
                     gameState = MENU2;
+                    PlayBGM(_T("qjbgmst.mp3"));
+
                 }
 
                 else if (m.x >= W - 100 && m.x <= W &&
@@ -101,11 +111,15 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == INTRO2_1 && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= W - 60 && m.x <= W - 10 && m.y >= 20 && m.y <= 70) {
                     gameState = MENU2;
+                    PlayBGM(_T("qjbgmst.mp3"));
+
                 }
                 else if (m.x >= W - 100 && m.x <= W &&
                     m.y >= H / 2 - 100 && m.y <= H / 2) {
@@ -118,16 +132,17 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == INTRO2_2 && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= W - 60 && m.x <= W - 10 && m.y >= 20 && m.y <= 70) {
                     gameState = MENU2;
+                    PlayBGM(_T("qjbgmst.mp3"));
+
+
                 }
-               /* else if (m.x >= W - 100 && m.x <= W &&
-                    m.y >= H / 2 - 100 && m.y <= H / 2) {
-                    gameState = INTRO2_2;
-                }*/
                 else if (m.x >=0 && m.x <= 100 &&
                     m.y >= H / 2 - 100 && m.y <= H / 2) {
                     PlayBGM2(_T("bh.mp3"));
@@ -136,6 +151,8 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == PLAYING1 && m.uMsg == WM_LBUTTONDOWN) {
@@ -166,6 +183,7 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
                 }
             }
             else if (gameState == LOSE1 && m.uMsg == WM_LBUTTONDOWN) {
@@ -191,6 +209,8 @@ int main() {
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == WIN2 && m.uMsg == WM_LBUTTONDOWN) {
@@ -202,29 +222,37 @@ int main() {
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
                     m.y >= btny && m.y <= btny + BTN_H) {
                     gameState = PLAYING2;
+                    PlayBGM(_T("bgm.mp3"));
+
+
                     
                 }
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
             else if (gameState == LOSE2 && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= btnX && m.x <= btnX + BTN_W &&
                     m.y >= btnY && m.y <= btnY + BTN_H) {
                     gameState = MENU2;
-                    PlayBGM(_T("b1.mp3"));
+                    PlayBGM(_T("qjbgmst.mp3"));
 
                 }
                 else if (m.x >= btnx && m.x <= btnx + BTN_W &&
                     m.y >= btny && m.y <= btny + BTN_H) {
                     gameState = PLAYING2;
                     resetGame();
-                
+                    PlayBGM(_T("qjbgm.mp3"));
+
                 }
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
                     gameState = MENU0;
+                    PlayBGM(_T("startbgm.mp3"));
+
                 }
             }
 
