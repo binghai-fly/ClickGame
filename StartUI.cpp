@@ -41,6 +41,8 @@ void initMenu() {
     btnx = btnX;
     btny = btnY + 80;
     
+    // 启动时在主菜单播放背景音乐
+    PlayBGM(_T("startbgm.mp3"));
 }
 
 void drawMenu1() {
@@ -51,8 +53,8 @@ void drawMenu1() {
         solidrectangle(0, 0, W, H);
     }
 
-    drawButton(btnX, btnY,bt,btd);
-    drawButton(btnx, btny,bt,btd);
+    drawButton(btnX, btnY,btd,bt);
+    drawButton(btnx, btny,btd,bt);
 
     setbkmode(TRANSPARENT);
     setcolor(WHITE);
@@ -66,8 +68,8 @@ void drawMenu() {
     putimage(0, 0, &menuBg);
     drawHome();
 
-    drawButton(btnX, btnY, btdgn, btgn);
-    drawButton(btnx, btny, btdgn, btgn);
+    drawButton(btnX, btnY, btgn, btdgn);
+    drawButton(btnx, btny, btgn, btdgn);
    
     setbkmode(TRANSPARENT);
     setcolor(RGB(125,125,125));
@@ -84,7 +86,7 @@ void drawIntro() {
     closeBtnX = btnX + 300;
     closeBtnY = btny;
 
-    drawButton(closeBtnX, closeBtnY, btdgn, btgn);
+    drawButton(closeBtnX, closeBtnY, btgn, btdgn);
 
     setbkmode(TRANSPARENT);
     setcolor(RGB(125, 125, 125));
@@ -177,8 +179,8 @@ void drawWin() {
     putimage(0, 0, &overBg);
     drawHome();
 
-    drawButton(btnX, btnY, btdgn, btgn);
-    drawButton(btnx, btny, btdgn, btgn);
+    drawButton(btnX, btnY, btgn, btdgn);
+    drawButton(btnx, btny, btgn, btdgn);
 
     setbkmode(TRANSPARENT);
     setcolor(RGB(125, 125, 125));
@@ -191,8 +193,8 @@ void drawLose() {
     putimage(0, 0, &loseBg);
     drawHome();
 
-    drawButton(btnX, btnY, btdgn, btgn);
-    drawButton(btnx, btny, btdgn, btgn);
+    drawButton(btnX, btnY, btgn, btdgn);
+    drawButton(btnx, btny, btgn, btdgn);
 
     setbkmode(TRANSPARENT);
     setcolor(RGB(125, 125, 125));

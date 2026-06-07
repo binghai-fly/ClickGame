@@ -9,7 +9,7 @@ int main() {
     srand((unsigned)time(NULL));
 
     int numm = rand()%10 + 20;
-    PlayBGM(_T("startbgm.mp3"));
+    // 初始不在此处播放 startbgm，返回 MENU0 的分支会在切换时播放对应音乐
 
     initMenu();
     Imageinit();

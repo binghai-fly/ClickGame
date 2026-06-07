@@ -35,8 +35,10 @@ void updateAI() {
         else p2.x += p2.speed;
     }
 
-    if (p2.x < 10) p2.x = 10;
-    if (p2.x > W - ROLE_SIZE1 - 10) p2.x = W - ROLE_SIZE1 - 10;
+    // keep p2 inside playable area with consistent margins
+    const int SIDE_MARGIN = 50;
+    if (p2.x < SIDE_MARGIN) p2.x = SIDE_MARGIN;
+    if (p2.x > W - ROLE_SIZE1 - SIDE_MARGIN) p2.x = W - ROLE_SIZE1 - SIDE_MARGIN;
 
     // 当血量低时优先防御，但不应完全放弃进攻：使用概率决定防御或主动进攻
     if (p2.hp < 120 && !p2.isDefending && !p2.isAttack && p2.defendTimer == 0 && absDistance < 120) {
@@ -163,8 +165,10 @@ void update() {
         }
         if (!sIsPressed) sWasPressed = false;
 
-        if (p1.x < 10) p1.x = 0;
-        if (p1.x > W - ROLE_SIZE - 10) p1.x = W - ROLE_SIZE - 10;
+        // ensure p1 stays within consistent horizontal bounds
+        const int P1_SIDE_MARGIN = 50;
+        if (p1.x < P1_SIDE_MARGIN) p1.x = P1_SIDE_MARGIN;
+        if (p1.x > W - ROLE_SIZE - P1_SIDE_MARGIN) p1.x = W - ROLE_SIZE - P1_SIDE_MARGIN;
 
         static bool spaceWasPressed = false;
         bool spaceIsPressed = (GetAsyncKeyState(VK_SPACE) & 0x8000);
