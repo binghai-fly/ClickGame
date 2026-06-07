@@ -1,6 +1,6 @@
 #include"head.h"
 
-Player player; // 全局玩家实例
+Player player; 
 
 // 玩家初始化（移除地面/跳跃相关初始化）
 void PlayerInit(Player* p) {

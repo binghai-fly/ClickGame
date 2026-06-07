@@ -38,12 +38,22 @@ void updateAI() {
     if (p2.x < 10) p2.x = 10;
     if (p2.x > W - ROLE_SIZE1 - 10) p2.x = W - ROLE_SIZE1 - 10;
 
+    // 当血量低时优先防御，但不应完全放弃进攻：使用概率决定防御或主动进攻
     if (p2.hp < 120 && !p2.isDefending && !p2.isAttack && p2.defendTimer == 0 && absDistance < 120) {
-        p2.isDefending = true;
-        p2.defendTimer = 30;
-        p2.defendCd = 60;
-        if (p1.x > p2.x) p2.face = 1;
-        else p2.face = -1;
+        int defendChance = 70; 
+        if (p2.attackCd == 0 && (rand() % 100) >= defendChance) {
+            // 尝试主动进攻
+            p2.isAttack = true;
+            p2.attackTimer = 0;
+        }
+        else {
+            // 选择防御
+            p2.isDefending = true;
+            p2.defendTimer = 30;
+            p2.defendCd = 60;
+            if (p1.x > p2.x) p2.face = 1;
+            else p2.face = -1;
+        }
     }
 
     if (p2.isOnGround && !p2.isAttack && p2.attackCd == 0 && rand() % 100 == 0) {
@@ -92,11 +102,7 @@ void update() {
         p2.isAttack = false;
         p1.isUltimate = false;
         p2.isUltimate = false;
-        // Allow restart when game over
-        if (GetAsyncKeyState('R') & 0x8000) {
-            resetGame();
-        }
-        return;
+       
     }
 
     if (p1.attackCd > 0) p1.attackCd--;

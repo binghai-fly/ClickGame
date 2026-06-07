@@ -12,22 +12,17 @@ IMAGE cross;
 IMAGE home;
 IMAGE mds;
 IMAGE bkk;
+IMAGE bt;
+IMAGE btd;
+IMAGE btyw;
+IMAGE btdyw;
+IMAGE btgn;
+IMAGE btdgn;
 
 bool isValidImage(IMAGE* img) {
     return img != nullptr && GetImageBuffer(img) != nullptr;
 }
 
-
-
-// Simple logger to aid debugging resource loading / runtime issues
-//static void Log(const TCHAR* msg)
-//{
-//    std::wofstream ofs("game_debug.log", std::ios::app);
-//    if (!ofs) return;
-//    SYSTEMTIME st;
-//    GetLocalTime(&st);
-//    ofs << st.wYear << L"-" << st.wMonth << L"-" << st.wDay << L" " << st.wHour << L":" << st.wMinute << L":" << st.wSecond << L" " << msg << std::endl;
-//}
 
 void safeLoadImage(IMAGE* img, const TCHAR* filename, int width, int height) {
     if (img == nullptr) return;
@@ -100,7 +95,12 @@ void Imageinit() {
     safeLoadImage(&bSt, _T("picture1/buttonStart.png"), 100, 100);
     safeLoadImage(&cross, _T("picture1/cross.png"), 50, 50);
     safeLoadImage(&home, _T("picture1/home.png"), 50, 50);
-    
+    safeLoadImage(&bt, _T("picture/bt.png"),160,50);
+    safeLoadImage(&btd, _T("picture/btd.png"), 160, 50);
+    safeLoadImage(&btyw, _T("picture/btyw.png"), 160, 50);
+    safeLoadImage(&btdyw, _T("picture/btdyw.png"), 160, 50);
+    safeLoadImage(&btgn, _T("picture/btgn.png"), 160, 50);
+    safeLoadImage(&btdgn, _T("picture/btdgn.png"), 160, 50);
 
 
     safeLoadImage(&shield[0], _T("picture1/shield.png"), ROLE_SIZE, ROLE_SIZE);
@@ -261,52 +261,16 @@ void drawMenu2() {
 
     putimage(0, 0, &start);
     drawHome();
+    
+    drawButton(btnX, btnY, btyw, btdyw);
+    drawButton(btnx, btny, btyw, btdyw);
 
 
-    /*putimage(btnX, btnY, &startBtnImg);*/
-       // 默认颜色
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
-
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RED);
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("开始游戏"));
-    outtextxy(btnx + 30, btny + 7, _T("游戏介绍"));
+    outtextxy(btnX + 20, btnY + 4, _T("开始游戏"));
+    outtextxy(btnx + 20, btny + 4, _T("游戏介绍"));
 }
 
 
@@ -315,96 +279,26 @@ void drawWin2() {
     putimage(0, 0, &wini2);
     drawHome();
 
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
-
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
+    drawButton(btnX, btnY, btyw, btdyw);
+    drawButton(btnx, btny, btyw, btdyw);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RED);
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
-    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
+    outtextxy(btnX + 20, btnY + 4, _T("返回菜单"));
+    outtextxy(btnx + 20, btny + 4, _T("重新游戏"));
 }
 
 void drawlose2() {
    
     putimage(0, 0, &losei2);
     drawHome();
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
-
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
+    drawButton(btnX, btnY, btyw, btdyw);
+    drawButton(btnx, btny, btyw, btdyw);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RED);
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
-    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
+    outtextxy(btnX + 20, btnY + 4, _T("返回菜单"));
+    outtextxy(btnx + 20, btny + 4, _T("重新游戏"));
 }
 
 void drawIntro2() {
@@ -417,44 +311,6 @@ void drawIntro2() {
     if (inBtn) {
         drawRight();
     }
-    
-    //putimage(200, 0, &gameIntro);
-    /*int w = dd.getwidth();
-    int h = gameIntro.getheight();
-
-    HDC dstDC = GetImageHDC(NULL);
-    HDC srcDC = GetImageHDC(&gameIntro);
-
-    BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-    AlphaBlend(dstDC, 220, 0, w, h,
-        srcDC, 0, 0, w, h, blend);*/
-    //closeBtnX = btnX + 300;
-    //closeBtnY = btny;
-    //COLORREF btnColor = RGB(255, 128, 0);
-    //// 悬浮颜色
-    //COLORREF hoverColor = RGB(255, 165, 50);
-    //// 点击颜色
-    //COLORREF clickColor = RGB(200, 80, 0);
-
-    //bool inBtn3 = (m.x >= closeBtnX && m.x <= closeBtnX + BTN_W &&
-    //    m.y >= closeBtnY && m.y <= closeBtnY + BTN_H);
-
-    //if (inBtn3)
-    //{
-    //    if (m.uMsg == WM_LBUTTONDOWN)
-    //        setfillcolor(clickColor);   // 按下变深
-    //    else
-    //        setfillcolor(hoverColor);   // 悬浮变浅
-    //}
-    //else
-    //{
-    //    setfillcolor(btnColor);         // 离开恢复原色
-    //}
-    //solidrectangle(closeBtnX, closeBtnY, closeBtnX + BTN_W, closeBtnY + BTN_H);
-    //setbkmode(TRANSPARENT);
-    //setcolor(WHITE);
-    //settextstyle(30, 0, _T("黑体"));
-    //outtextxy(closeBtnX + 60, closeBtnY + 7, _T("关闭"));
 }
 
 void drawCross() {
@@ -492,12 +348,6 @@ void drawIntro2_2() {
     drawCross();
     drawHome();
 
-    /*bool inBtn = (m.x >= W - 100 && m.x <= W &&
-        m.y >= H / 2 - 100 && m.y <= H / 2);
-    if (inBtn) {
-        drawRight();
-    }*/
-
     bool inBtn1 = (m.x >= 0 && m.x <= 100 &&
         m.y >= H / 2 - 100 && m.y <= H / 2);
     if (inBtn1) {
@@ -507,4 +357,21 @@ void drawIntro2_2() {
 
 void drawHome() {
     DrawTransparentImage(0, H-70, &home);
+}
+
+void drawButton(int btx, int bty ,IMAGE imgbt,IMAGE imgbtd) {
+
+    DrawTransparentImage(btx, bty,&imgbt);
+    bool inBtn = (m.x >= btx && m.x <= btx + 160 &&
+        m.y >= bty && m.y <= bty + 50);
+
+    if (inBtn)
+    {
+            DrawTransparentImage(btx, bty, &imgbtd);      
+    }
+    else
+    {
+        DrawTransparentImage(btx, bty, &imgbt);
+    }
+
 }

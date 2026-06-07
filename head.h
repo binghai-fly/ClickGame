@@ -15,8 +15,6 @@
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"msimg32.lib")
 
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-
 #define W 1280
 #define H 720
 #define MAX_MONSTERS 10
@@ -193,6 +191,13 @@ extern IMAGE start;
 extern IMAGE wini2;
 extern IMAGE losei2;
 extern IMAGE dd;
+extern IMAGE btd;
+extern IMAGE bt;
+extern IMAGE btdgn;
+extern IMAGE btgn;
+extern IMAGE btdyw;
+extern IMAGE btyw;
+
 
 // 大招飞行物
 struct Projectile {
@@ -301,3 +306,4 @@ void drawIntro2_1();
 void drawIntro2_2();
 void drawHome();
 void PlayBGM2(const TCHAR* name);
+void drawButton(int btx, int bty, IMAGE imgbt, IMAGE imgbtd);

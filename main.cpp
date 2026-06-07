@@ -85,8 +85,7 @@ int main() {
             else if (gameState == INTRO1 && m.uMsg == WM_LBUTTONDOWN) {
                 if (m.x >= closeBtnX && m.x <= closeBtnX + BTN_W &&
                     m.y >= closeBtnY && m.y <= closeBtnY + BTN_H) {
-                    gameState = MENU1; // 点击关闭返回菜单
-                   // PlayBGM(_T("b1.mp3"));
+                    gameState = MENU1; 
                 }
                 else if (m.x >= 0 && m.x <= 100 &&
                     m.y >= H - 200 && m.y <= H) {
@@ -123,6 +122,7 @@ int main() {
                 }
                 else if (m.x >= W - 100 && m.x <= W &&
                     m.y >= H / 2 - 100 && m.y <= H / 2) {
+                    PlayBGM2(_T("mds.mp3"));
                     gameState = INTRO2_2;
                 }
                 else if (m.x >=0 && m.x <= 100 &&
@@ -296,13 +296,13 @@ int main() {
             PlayerUpdateAnim(&player);
             MonsterUpdate();
             AttackUpdate();
-            MonsterAttackUpdate(); // 新增：更新怪兽攻击
+            MonsterAttackUpdate(); 
             BossUpdate();
             BossAttackUpdate();
 
             if (CheckGameCollision() == 1) {
                 gameState = LOSE1;
-                StopBGM();          // 专门停止背景音乐
+                StopBGM();         
                 PlayLoseMusic(_T("lose.mp3"));
             }
 
@@ -313,14 +313,12 @@ int main() {
                 continue;
             }
 
-            //DrawAllBgTiles();
-
             bkDraw();
             GemDraw();
             lmDraw();
             MonsterDraw();
             AttackDraw();
-            MonsterAttackDraw(); // 新增：绘制怪兽攻击
+            MonsterAttackDraw();
             PlayerDraw(&player);
             BossDraw();
             BossAttackDraw();
@@ -338,14 +336,14 @@ int main() {
             update();
             if (p1.hp <= 0) {
                 gameState = LOSE2;
-                StopBGM();          // 专门停止背景音乐
-                PlayLoseMusic(_T("lose.mp3"));
+                StopBGM();          
+                PlayLoseMusic(_T("lose1.mp3"));
             }
 
             if (p2.hp<=0 ) {
                 gameState = WIN2;
                 StopBGM();
-                PlayWinMusic(_T("win.mp3"));
+                PlayWinMusic(_T("win1.mp3"));
                 continue;
             }
         }

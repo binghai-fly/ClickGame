@@ -50,48 +50,15 @@ void drawMenu1() {
         setfillcolor(RGB(30, 30, 60));
         solidrectangle(0, 0, W, H);
     }
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
 
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
+    drawButton(btnX, btnY,bt,btd);
+    drawButton(btnx, btny,bt,btd);
 
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
     setbkmode(TRANSPARENT);
     setcolor(WHITE);
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 60, btnY + 7, _T("转避"));
-    outtextxy(btnx + 30, btny + 7, _T("拳皇苍穹"));
+    outtextxy(btnX + 50, btnY + 4, _T("转避"));
+    outtextxy(btnx + 20, btny + 4, _T("拳皇苍穹"));
 }
 
 void drawMenu() {
@@ -99,94 +66,30 @@ void drawMenu() {
     putimage(0, 0, &menuBg);
     drawHome();
 
-    
-    /*putimage(btnX, btnY, &startBtnImg);*/
-       // 默认颜色
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
+    drawButton(btnX, btnY, btdgn, btgn);
+    drawButton(btnx, btny, btdgn, btgn);
    
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-    
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RGB(125,125,125));
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("开始游戏"));
-    outtextxy(btnx + 30, btny + 7, _T("游戏介绍"));
+    outtextxy(btnX + 20, btnY + 4, _T("开始游戏"));
+    outtextxy(btnx + 20, btny + 4, _T("游戏介绍"));
 }
 
 void drawIntro() {
     putimage(0, 0, &menuBg);
     drawHome();
 
-    //putimage(200, 0, &gameIntro);
-    int w = gameIntro.getwidth();
-    int h = gameIntro.getheight();
-
-    HDC dstDC = GetImageHDC(NULL);
-    HDC srcDC = GetImageHDC(&gameIntro);
-
-    BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-    AlphaBlend(dstDC, 220,0 , w , h ,
-        srcDC, 0, 0, w, h, blend);
+    DrawTransparentImage(220, 0, &gameIntro);
     closeBtnX = btnX + 300;
     closeBtnY = btny;
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
 
-    bool inBtn3 = (m.x >= closeBtnX && m.x <= closeBtnX + BTN_W &&
-        m.y >= closeBtnY && m.y <= closeBtnY + BTN_H);
+    drawButton(closeBtnX, closeBtnY, btdgn, btgn);
 
-    if (inBtn3)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(closeBtnX, closeBtnY, closeBtnX + BTN_W, closeBtnY + BTN_H);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
-    settextstyle(30, 0, _T("黑体"));
-    outtextxy(closeBtnX + 60, closeBtnY + 7, _T("关闭"));
+    setcolor(RGB(125, 125, 125));
+    settextstyle(30, 0, _T("隶书"));
+    outtextxy(closeBtnX + 50, closeBtnY + 4, _T("关闭"));
 }
 
 void bkDraw() {
@@ -203,44 +106,21 @@ void DrawUI() {
             curImg = &heart_full;
             if (curImg == NULL) return;
 
-            int w = curImg->getwidth();
-            int h = curImg->getheight();
-
-            HDC dstDC = GetImageHDC(NULL);
-            HDC srcDC = GetImageHDC(curImg);
-
-            BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-            AlphaBlend(dstDC, x, 10, w , h ,
-                srcDC, 0, 0, w, h, blend);
+            DrawTransparentImage(x, 10, curImg);
         }
         else {
             curImg=&heart_empty;
             if (curImg == NULL) return;
+            DrawTransparentImage(x, 10, curImg);
 
-            int w = curImg->getwidth();
-            int h = curImg->getheight();
-
-            HDC dstDC = GetImageHDC(NULL);
-            HDC srcDC = GetImageHDC(curImg);
-
-            BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-            AlphaBlend(dstDC, x, 10, w, h,
-                srcDC, 0, 0, w, h, blend);
         }
     }
     // 右上角：金币图标 + 数字图片
     curImg = &coin_icon;
     if (curImg == NULL) return;
 
-    int w = curImg->getwidth();
-    int h = curImg->getheight();
+    DrawTransparentImage(W-130, 10, curImg);
 
-    HDC dstDC = GetImageHDC(NULL);
-    HDC srcDC = GetImageHDC(curImg);
-
-    BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-    AlphaBlend(dstDC, W-130, 10, w, h,
-        srcDC, 0, 0, w, h, blend);
     
     
     // 绘制金币数字（图片）
@@ -249,15 +129,8 @@ void DrawUI() {
         curImg = &num_imgs[0];
         if (curImg == NULL) return;
 
-        int w = curImg->getwidth();
-        int h = curImg->getheight();
+        DrawTransparentImage(W-70, 10, curImg);
 
-        HDC dstDC = GetImageHDC(NULL);
-        HDC srcDC = GetImageHDC(curImg);
-
-        BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-        AlphaBlend(dstDC, W-70, 10, w, h,
-            srcDC, 0, 0, w, h, blend);
        
     }
     else {
@@ -265,17 +138,8 @@ void DrawUI() {
         while (n > 0) {
             int d = n % 10;
             curImg = &num_imgs[d];
-            if (curImg == NULL) return;
+            DrawTransparentImage(x, 10, curImg);
 
-            int w = curImg->getwidth();
-            int h = curImg->getheight();
-
-            HDC dstDC = GetImageHDC(NULL);
-            HDC srcDC = GetImageHDC(curImg);
-
-            BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-            AlphaBlend(dstDC, x, 10, w, h,
-                srcDC, 0, 0, w, h, blend);
             x -= 25;
             n /= 10;
         }
@@ -289,17 +153,8 @@ void DrawUI() {
     int nn = monstersKilledCount;
     if (nn == 0) {
         curImg = &num_imgs[0];
-        if (curImg == NULL) return;
+        DrawTransparentImage(W/2, 10, curImg);
 
-        int w = curImg->getwidth();
-        int h = curImg->getheight();
-
-        HDC dstDC = GetImageHDC(NULL);
-        HDC srcDC = GetImageHDC(curImg);
-
-        BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-        AlphaBlend(dstDC, W /2, 10, w, h,
-            srcDC, 0, 0, w, h, blend);
 
     }
     else {
@@ -309,15 +164,8 @@ void DrawUI() {
             curImg = &num_imgs[d];
             if (curImg == NULL) return;
 
-            int w = curImg->getwidth();
-            int h = curImg->getheight();
+            DrawTransparentImage(x, 10, curImg);
 
-            HDC dstDC = GetImageHDC(NULL);
-            HDC srcDC = GetImageHDC(curImg);
-
-            BLENDFUNCTION blend = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
-            AlphaBlend(dstDC, x, 10, w, h,
-                srcDC, 0, 0, w, h, blend);
             x -= 25;
             nn /= 10;
         }
@@ -329,94 +177,26 @@ void drawWin() {
     putimage(0, 0, &overBg);
     drawHome();
 
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
+    drawButton(btnX, btnY, btdgn, btgn);
+    drawButton(btnx, btny, btdgn, btgn);
 
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RGB(125, 125, 125));
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
-    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
+    outtextxy(btnX + 20, btnY + 4, _T("返回菜单"));
+    outtextxy(btnx + 20, btny + 4, _T("重新游戏"));
 }
 
 void drawLose() {
     putimage(0, 0, &loseBg);
     drawHome();
 
-    COLORREF btnColor = RGB(255, 128, 0);
-    // 悬浮颜色
-    COLORREF hoverColor = RGB(255, 165, 50);
-    // 点击颜色
-    COLORREF clickColor = RGB(200, 80, 0);
+    drawButton(btnX, btnY, btdgn, btgn);
+    drawButton(btnx, btny, btdgn, btgn);
 
-    bool inBtn = (m.x >= btnX && m.x <= btnX + BTN_W &&
-        m.y >= btnY && m.y <= btnY + BTN_H);
-    bool inBtn1 = (m.x >= btnx && m.x <= btnx + BTN_W &&
-        m.y >= btny && m.y <= btny + BTN_H);
-
-    if (inBtn)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-    solidrectangle(btnX, btnY, btnX + BTN_W, BTN_H + btnY);
-    if (inBtn1)
-    {
-        if (m.uMsg == WM_LBUTTONDOWN)
-            setfillcolor(clickColor);   // 按下变深
-        else
-            setfillcolor(hoverColor);   // 悬浮变浅
-    }
-    else
-    {
-        setfillcolor(btnColor);         // 离开恢复原色
-    }
-
-
-    solidrectangle(btnx, btny, btnx + BTN_W, BTN_H + btny);
     setbkmode(TRANSPARENT);
-    setcolor(WHITE);
+    setcolor(RGB(125, 125, 125));
     settextstyle(30, 0, _T("隶书"));
-    outtextxy(btnX + 30, btnY + 7, _T("返回菜单"));
-    outtextxy(btnx + 30, btny + 7, _T("重新游戏"));
+    outtextxy(btnX + 20, btnY + 4, _T("返回菜单"));
+    outtextxy(btnx + 20, btny + 4, _T("重新游戏"));
 }
